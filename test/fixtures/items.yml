@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  packing_style: MyString
+  length: 1
+  width: 1
+  height: 1
+  weight: 1.5
+  cog_height_type: MyString
+  cog_height: 1.5
+
+two:
+  packing_style: MyString
+  length: 1
+  width: 1
+  height: 1
+  weight: 1.5
+  cog_height_type: MyString
+  cog_height: 1.5

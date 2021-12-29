@@ -1,0 +1,16 @@
+// Place all the styles related to the Containers controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+*{
+    margin: 10px
+}
+
+table{
+    width: 1200px;
+    border-collapse: collapse;
+    th,td{
+        border: 1px solid black;
+        text-align: center;
+    }
+}
+
