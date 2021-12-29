@@ -1,4 +1,4 @@
-<%= form_with(model: container) do |form| %>
+<%= form_with(model: container, id: "form_container") do |form|  %>
   <% if container.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(container.errors.count, "error") %> prohibited this container from being saved:</h2>
@@ -13,29 +13,45 @@
 
   <div class="container_group">
     <%= form.label :container_type %>
-    <%= form.select :container_type, ['FR20', 'FR40', 'OT20','OT40'] %>
+    <%= form.select :container_type, ['FR20', 'FR40', 'OT20','OT40']%>
   </div>
 
   <table class="item_group">
-    <tr>
-      <th rowspan="2" >SEQ</th>
-      <th rowspan="2">PACKING STYLE</th>
-      <th colspan="4"> SIZE </th>
-      <th colspan="2"> GROSS WEIGHT </th>
-      <th colspan="2"> CENTER OF GRAVITY HEIGHT</th>
-      <th rowspan="2"> ACTIONS </th>
+    <tr class="title_item">
+        <th rowspan="2" class="title_item" >SEQ</th>
+        <th rowspan="2" class="title_item">PACKING STYLE</th>
+        <th colspan="4" class="title_item"> SIZE </th>
+        <th colspan="2" class="title_item"> GROSS WEIGHT </th>
+        <th colspan="2" class="title_item"> CENTER OF GRAVITY HEIGHT</th>
+        <th rowspan="2"  class="title_item"> ACTIONS </th>
     </tr>
     
-    <tr>
-      <td>LENGTH</td>
-      <td>WIDTH</td>
-      <td>HEIGHT</td>
-      <td>UNIT</td>
-      <td>WEIGHT</td>
-      <td>UNIT</td>
-      <td>HEIGHT</td>
-      <td>UNIT</td>
-    </tr>
+      <tr class="sub_title_item">
+        <td>LENGTH</td>
+        <td>WIDTH</td>
+        <td>HEIGHT</td>
+        <td>UNIT</td>
+        <td>WEIGHT</td>
+        <td>UNIT</td>
+        <td>HEIGHT</td>
+        <td>UNIT</td>
+      </tr>
+      <% @items.each do |item| %>
+        <tr>
+          <td><%= item.id %></td>
+          <td><%= item.packing_style %></td>
+          <td><%= item.length %></td>
+          <td><%= item.width %></td>
+          <td><%= item.height %></td>
+          <td><%= item.height_unit %> </td>
+          <td><%= item.weight %></td>
+          <td><%= item.weight_unit%> </td>
+          <td><%= item.cog_height %></td>
+          <td><%= item.cog_height_unit%></td>
+          <td><%= link_to 'Edit', edit_item_path(item) %></td>
+          <td><%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        </tr>
+      <% end%>
   </table>
 
   <div class="actions">

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_29_040311) do
+ActiveRecord::Schema.define(version: 2021_12_29_044810) do
 
   create_table "containers", force: :cascade do |t|
     t.string "container_type"
@@ -28,6 +28,9 @@ ActiveRecord::Schema.define(version: 2021_12_29_040311) do
     t.float "cog_height"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "height_unit"
+    t.string "weight_unit"
+    t.string "cog_height_unit"
   end
 
 end

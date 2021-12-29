@@ -13,6 +13,7 @@ class ContainersController < ApplicationController
   # GET /containers/new
   def new
     @container = Container.new
+    @items = Item.all
   end
 
   # GET /containers/1/edit

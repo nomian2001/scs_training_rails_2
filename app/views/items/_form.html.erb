@@ -1,0 +1,55 @@
+<%= form_with(model: item) do |form| %>
+  <% if item.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(item.errors.count, "error") %> prohibited this item from being saved:</h2>
+
+      <ul>
+        <% item.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="packing_style_group">
+    <%= form.label :packing_style %>
+    <%= form.select :packing_style, ['CRATE', 'SKID', 'BARE','CASE'] %>
+  </div>
+
+  <h1> SIZE </h1>
+  <div class="size_group">
+    <%= form.label :length %>
+    <%= form.number_field :length, in: 0..1500, step: 1 %>
+    <%= form.label :width %>
+    <%= form.number_field :width, in: 0..300, step: 1 %>
+    <%= form.label :height %>
+    <%= form.number_field :height, in: 0..400, step: 1 %>
+    <%= form.label "Unit"%>
+    <%= form.select :height_unit, ['cm']%>
+  </div>
+
+    <h1> GROSS WEIGHT </h1>
+  <div class="size_group">
+    <%= form.label :weight %>
+    <%= form.number_field :weight, in: 0.0..5, step: 0.1 %>
+    <%= form.label "Unit"%>
+    <%= form.select :weight_unit, ['ton']%>
+  </div>
+
+    <h1> CENTER OF GRAVITY HEIGHT </h1>
+  <div class="size_group">
+    <%= form.label :cog_height_type %>
+    <%= form.select :cog_height_type, ['MANUAL', 'TBA', 'HALF_OF_CARGO_HEIGHT_OR_LESS'] %>
+    <% if :cog_height_type == 'MANUAL' %>
+      <%= form.label :cog_height %>
+      <%= form.number_field :cog_height, in: 0..400, step: 1 %>
+      <%= form.label "Unit"%>
+      <%= form.select :cog_height_unit, ['cm']%>
+    <% end %>
+    
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
