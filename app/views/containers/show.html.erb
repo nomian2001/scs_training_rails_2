@@ -1,9 +1,65 @@
-<p id="notice"><%= notice %></p>
-
+<div id="form_container">
+  <% @result %>
 <p>
   <strong>Container type:</strong>
-  <%= @container.container_type %>
+  <%= @result['container_type'] %>
 </p>
+ 
+
+  <table class="item_group">
+    <tr class="title_item">
+        <th rowspan="2" class="title_item" >SEQ</th>
+        <th rowspan="2" class="title_item">PACKING STYLE</th>
+        <th colspan="4" class="title_item"> SIZE </th>
+        <th colspan="2" class="title_item"> GROSS WEIGHT </th>
+        <th class="title_item"> COG HEIGHT</th>
+        <th   class="title_item">RESULT </th>
+        <th colspan="2" rowspan="2" class="title_item"> REMARKS</th>
+    </tr>
+    
+    <tr class="sub_title_item">
+      <td>LENGTH</td>
+      <td>WIDTH</td>
+      <td>HEIGHT</td>
+      <td>UNIT</td>
+      <td>WEIGHT</td>
+      <td>UNIT</td>
+      <td>HEIGHT</td>
+      <td>ACCEPTANCE</td>
+    </tr>
+   
+    <% @result['items'].each_with_index do |item,index_of_item| %>
+      <tr class="item_result">
+        <td><%= index_of_item + 1 %></td>
+        <td><%= item["packing_style"] %></td>
+        <td><%= item['length'] %></td>
+        <td><%= item['width'] %></td>
+        <td><%= item['height'] %></td>
+        <td>cm</td>
+        <td><%= item['weight'] %></td>
+        <td>ton</td>
+        <td><%= item['cog_height'] %>cm</td>
+        <td><%= item['result'] %></td>
+        <td><%= item['remark'] %></td>
+      </tr>
+
+      
+    <% end %>
+
+    <tr class="result_container">
+        <td colspan="2">TOTAL</td>
+        <td><%= @result['total_height'] %></td>
+        <td colspan="3">cm</td>
+        <td><%= @result['total_weight'] %></td>
+        <td colspan="2">ton</td>
+        <td>OK </td>
+        <td></td>
+      <td>
+    </tr>
+
+  </table>
+
+</div>
 
 <%= link_to 'Edit', edit_container_path(@container) %> |
 <%= link_to 'Back', containers_path %>

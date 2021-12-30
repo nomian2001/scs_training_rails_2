@@ -1,15 +1,5 @@
 <%= form_with(model: item, id: "item_form", class: "d-flex flex-column justify-content-center") do |form| %>
-  <% if item.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(item.errors.count, "error") %> prohibited this item from being saved:</h2>
-
-      <ul>
-        <% item.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  
 
   <h1 class="title">Add new</h1>
 
