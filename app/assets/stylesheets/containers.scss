@@ -1,10 +1,17 @@
 // Place all the styles related to the Containers controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
-*{
-    margin: 10px
+body{
+    background-color: #424242 !important;
 }
+
 #form_container{
+    margin: 10px;
+    background-color: #424242;
+    color: #ececec;
+    padding: 0 25px 0 25px;
+    
+
     table{
         width: 1200px;
         border-collapse: collapse;
@@ -34,6 +41,33 @@
         height: 35px;
         padding-left: 5px;
         border-radius: 10px;
+        background: transparent;
+        color: #ececec;
+        margin-left: 5px;
+    }
+
+    .container_group{
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .item_result{
+        background-color: #ABC8C7;
+        color: black
+    }
+
+    .title{
+        padding-top: 10px;
+    
+    }
+
+    .item_group{
+        margin-bottom: 20px;
+    }
+
+    .btn{
+        margin-left: 10px;
+        margin-bottom: 10px;
     }
 }
 

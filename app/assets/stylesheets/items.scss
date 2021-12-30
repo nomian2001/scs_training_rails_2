@@ -1,3 +1,150 @@
 // Place all the styles related to the Items controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
+#item_form{
+    background-color: #424242;
+    border-radius: 15px;
+    color: #ececec;
+    margin: 5px;
+    padding: 0 25px 0 25px;
+
+    h1{
+        font-size: medium;
+        margin-bottom: 5px;
+        margin-top: 1rem;
+    }
+
+    .title{
+        font-size: 2rem;
+        padding-top: 10px;
+        padding-bottom: 5px;
+    }
+
+    fieldset{
+        border: 1px solid #ddd !important;
+        height: 50px;
+        width: 250px;
+        padding: 0 1.4em 2em 1em !important;
+        margin: 0 0 1.5em 0 !important;
+    }
+
+    legend{
+        font-size: 0.8em !important;
+        width: auto;
+        text-align: left;
+        float: none !important;
+        padding: 5px;
+    }
+
+
+   #item_packing_style{
+       background: transparent;
+       color: #ececec;
+       width: 350px;
+   }
+
+    #item_length{
+        background: transparent;
+        width: 225px;
+        border: none;
+        height: 30px;
+        color: #ececec;
+    }
+
+
+    #item_width{
+        background: transparent;
+        width: 225px;
+        border: none;
+        height: 30px;
+        color: #ececec;
+    }
+
+    #item_height{
+        background: transparent;
+        width: 225px;
+        border: none;
+        height: 30px;
+        color: #ececec;
+    }
+
+    #item_height_unit{
+        background: transparent;
+        width: 225px;
+        border: none;
+        height: 30px;
+        color: #ececec;
+    }
+
+    #item_weight{
+        background: transparent;
+        width: 225px;
+        border: none;
+        height: 30px;
+        color: #ececec;
+    }
+
+    #item_weight_unit{
+        background: transparent;
+        width: 225px;
+        border: none;
+        height: 30px;
+        color: #ececec;
+    }
+
+    #item_cog_height_type{
+        background: transparent;
+        width: 225px;
+        border: none;
+        height: 30px;
+        color: #ececec;
+    }
+
+    #item_cog_height{
+        background: transparent;
+        width: 225px;
+        border: none;
+        height: 30px;
+        color: #ececec;
+    }
+
+    #item_cog_height_unit{
+        background: transparent;
+        width: 225px;
+        border: none;
+        height: 30px;
+        color: #ececec;
+    }
+
+    #item_length:focus, #item_width:focus, #item_height:focus, #item_height_unit:focus,
+    #item_weight:focus, #item_weight_unit:focus, #item_cog_height_type:focus,
+    #item_cog_height:focus, #item_cog_height_unit:focus{
+        outline: none;
+    }
+
+    fieldset:active, fieldset:hover{
+        border: 3px solid #927EA0 !important;
+    }
+
+    a{
+        text-decoration: none;
+        color: white
+    }
+
+    .form-select:hover, .form-select:focus, .form-select:active{
+        border: 3px solid #927EA0 !important;
+    }
+
+    .btn{
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-danger{
+        margin-left: 5px;
+        border-radius: 25px;
+    }
+
+    .btn-primary{
+        border-radius: 25px;
+    }
+}

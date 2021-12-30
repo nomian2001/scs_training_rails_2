@@ -11,6 +11,8 @@
     </div>
   <% end %>
 
+  <h1 class="title">New Container</h1>
+
   <div class="container_group">
     <%= form.label :container_type %>
     <%= form.select :container_type, ['FR20', 'FR40', 'OT20','OT40']%>
@@ -23,7 +25,7 @@
         <th colspan="4" class="title_item"> SIZE </th>
         <th colspan="2" class="title_item"> GROSS WEIGHT </th>
         <th colspan="2" class="title_item"> CENTER OF GRAVITY HEIGHT</th>
-        <th rowspan="2"  class="title_item"> ACTIONS </th>
+        <th rowspan="2"  colspan="2" class="title_item"> ACTIONS </th>
     </tr>
     
       <tr class="sub_title_item">
@@ -37,7 +39,7 @@
         <td>UNIT</td>
       </tr>
       <% @items.each do |item| %>
-        <tr>
+        <tr class="item_result">
           <td><%= item.id %></td>
           <td><%= item.packing_style %></td>
           <td><%= item.length %></td>
@@ -54,8 +56,11 @@
       <% end%>
   </table>
 
-  <div class="actions">
-    <%= form.submit "Submit"%>
-    <%= link_to "Add", :new_item%>
+  <div class="actions d-flex flex-row-reverse">
+    <div class="btn btn-primary">
+      <%= link_to "Add", :new_item%>
+    </div>
+    <%= form.submit "Submit", class: "btn btn-primary"%>
+    
   </div>
 <% end %>

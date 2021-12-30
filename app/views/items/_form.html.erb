@@ -1,4 +1,4 @@
-<%= form_with(model: item) do |form| %>
+<%= form_with(model: item, id: "item_form", class: "d-flex flex-column justify-content-center") do |form| %>
   <% if item.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(item.errors.count, "error") %> prohibited this item from being saved:</h2>
@@ -11,45 +11,78 @@
     </div>
   <% end %>
 
-  <div class="packing_style_group">
-    <%= form.label :packing_style %>
-    <%= form.select :packing_style, ['CRATE', 'SKID', 'BARE','CASE'] %>
+  <h1 class="title">Add new</h1>
+
+  <div class="form-floating">
+      <%= form.select :packing_style, ['CRATE', 'SKID', 'BARE','CASE'],{}, class: 'form-select' %>
+      <%= form.label :packing_style %>
   </div>
 
   <h1> SIZE </h1>
-  <div class="size_group">
-    <%= form.label :length %>
-    <%= form.number_field :length, in: 0..1500, step: 1 %>
-    <%= form.label :width %>
-    <%= form.number_field :width, in: 0..300, step: 1 %>
-    <%= form.label :height %>
-    <%= form.number_field :height, in: 0..400, step: 1 %>
-    <%= form.label "Unit"%>
-    <%= form.select :height_unit, ['cm']%>
+  <div class="size_group d-flex ">
+    <fieldset>
+      <legend><%= form.label :length %></legend>
+      <%= form.number_field :length, in: 0..1500, step: 1 %>
+      
+    </fieldset>
+
+    <fieldset>
+      <legend><%= form.label :width %></legend>
+      <%= form.number_field :width, in: 0..300, step: 1 %>
+      
+    </fieldset>
+
+    <fieldset>
+      <legend><%= form.label :height %> </legend>
+      <%= form.number_field :height, in: 0..400, step: 1 %>
+    </fieldset>
+
+    <fieldset>
+      <legend><%= form.label "Unit"%></legend>
+      <%= form.text_field :height_unit, value: 'cm', readonly: true%>
+    </fieldset>
   </div>
 
-    <h1> GROSS WEIGHT </h1>
-  <div class="size_group">
-    <%= form.label :weight %>
-    <%= form.number_field :weight, in: 0.0..5, step: 0.1 %>
-    <%= form.label "Unit"%>
-    <%= form.select :weight_unit, ['ton']%>
-  </div>
-
-    <h1> CENTER OF GRAVITY HEIGHT </h1>
-  <div class="size_group">
-    <%= form.label :cog_height_type %>
-    <%= form.select :cog_height_type, ['MANUAL', 'TBA', 'HALF_OF_CARGO_HEIGHT_OR_LESS'] %>
-    <% if :cog_height_type == 'MANUAL' %>
-      <%= form.label :cog_height %>
-      <%= form.number_field :cog_height, in: 0..400, step: 1 %>
-      <%= form.label "Unit"%>
-      <%= form.select :cog_height_unit, ['cm']%>
-    <% end %>
+  <h1> GROSS WEIGHT </h1>
+  <div class="size_group d-flex">
+    <fieldset>
+      <legend><%= form.label :weight %> </legend>
+      <%= form.number_field :weight, in: 0.0..5.0, step: 0.1 %>
+    </fieldset>
+    
+    <fieldset>
+      <legend><%= form.label "Unit"%></legend>
+      <%= form.text_field :weight_unit, value: 'ton', readonly: true %>
+    </fieldset>
     
   </div>
 
-  <div class="actions">
-    <%= form.submit %>
+  <h1> CENTER OF GRAVITY HEIGHT </h1>
+  <div class="size_group d-flex">
+    <fieldset>
+      <legend><%= form.label :cog_height_type %></legend>
+      <%= form.select :cog_height_type, ['MANUAL', 'TBA', 'HALF OF CARGO HEIGHT OR LESS'] %>
+      
+    </fieldset>
+    
+    <fieldset>
+      <legend><%= form.label :cog_height %></legend>
+        <%= form.number_field :cog_height, in: 0..400, step: 1 %>
+      
+    </fieldset>
+
+    <fieldset>
+      <legend><%= form.label "Unit"%></legend>
+      <%= form.text_field :cog_height_unit, value: 'cm', readonly: true%>
+      
+    </fieldset>
+    
+  </div>
+
+  <div class="actions d-flex flex-row-reverse">
+    <div class="btn btn-danger ml-3">
+      <%= link_to 'CANCEL', new_container_path %>
+    </div>
+    <%= form.submit 'SAVE',class: "btn btn-primary "%>
   </div>
 <% end %>
