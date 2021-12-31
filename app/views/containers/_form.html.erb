@@ -28,9 +28,9 @@
         <td>HEIGHT</td>
         <td>UNIT</td>
       </tr>
-      <% @items.each do |item| %>
+      <% @items.each_with_index do |item,index_of_item| %>
         <tr class="item_result">
-          <td><%= item.id %></td>
+          <td><%= index_of_item + 1 %></td>
           <td><%= item.packing_style %></td>
           <td><%= item.length %></td>
           <td><%= item.width %></td>
@@ -40,17 +40,23 @@
           <td><%= item.weight_unit%> </td>
           <td><%= item.cog_height %></td>
           <td><%= item.cog_height_unit%></td>
-          <td><%= link_to 'Edit', edit_item_path(item) %></td>
-          <td><%= link_to 'Destroy', item, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <td><%= link_to edit_item_path(item) do %>
+            <i class="fas fa-edit"></i>
+            <%end%>
+          </td>
+          <td><%= link_to  item, method: :delete, data: { confirm: 'Are you sure?' } do %>
+            <i class="fas fa-trash-alt"></i>
+            <%end%>
+          </td>
         </tr>
       <% end%>
   </table>
 
   <div class="actions d-flex flex-row-reverse">
-    <div class="btn btn-primary">
+    <div class="btn btn-success">
       <%= link_to "Add", :new_item%>
     </div>
-    <%= form.submit "Submit", class: "btn btn-primary"%>
+    <%= form.submit "Submit", class: "btn btn-primary item_submit" %>
     
   </div>
 <% end %>

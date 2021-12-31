@@ -39,8 +39,14 @@
         <td><%= item['weight'] %></td>
         <td>ton</td>
         <td><%= item['cog_height'] %>cm</td>
-        <td><%= item['result'] %></td>
-        <td><%= item['remark'] %></td>
+        <td id="acceptance_item"><%= item['result'] %></td>
+        <td>
+          <% if !item['remark'].blank? %>
+            <% item['remark'].each do |remark| %>
+              <p>- <%= remark%> </p>
+            <%end%>
+          <%end%>
+        </td>
       </tr>
 
       
@@ -48,18 +54,30 @@
 
     <tr class="result_container">
         <td colspan="2">TOTAL</td>
-        <td><%= @result['total_height'] %></td>
+        <td><%= @result['total_length'] %></td>
         <td colspan="3">cm</td>
         <td><%= @result['total_weight'] %></td>
         <td colspan="2">ton</td>
-        <td>OK </td>
-        <td></td>
-      <td>
+        <td><%= @result['total_result'] %> </td>
+        <td>
+          <% if !@result['total_remark'].blank? %>
+            <% @result['total_remark'].each do |total_remark| %>
+              <p>- <%= total_remark%></p>
+            <% end %>
+          <%end%>
+        </td>
+      
     </tr>
 
   </table>
 
+  <div class="conclusion">
+    <h4>CONCLUSION OF YOUR INQUIRY</h4>
+    <div class="group_conclusion d-flex justify-content-center">
+        <p id="final_conclusion"><%= @result['final_conclusion'] %></p>
+    </div>
+  </div>
+
 </div>
 
-<%= link_to 'Edit', edit_container_path(@container) %> |
-<%= link_to 'Back', containers_path %>
+

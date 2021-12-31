@@ -10,8 +10,9 @@ module ContainersHelper
     MESSAGE9 = "Weight may exceeds max payload"
     MESSAGE10 = "This acceptance check has to be done again after COG height is determined. This result assuming that the COG is half height of the cargo as you inputted 'TBA' for COG." 
 
+    @items = Item.all
+
     def handle_flat_track_item(container, result)
-        @items = Item.all
         @items.each_with_index do |item,index_of_item|
             packing_style_item = item.packing_style
             if(packing_style_item.upcase == Item::PACKING_STYLE_BARE || packing_style_item.upcase == Item::PACKING_STYLE_SKID)
@@ -53,33 +54,26 @@ module ContainersHelper
     def flat_track_check_weight_distribution_FR20(item,container_type,result,index_of_item)
         length_item = item.length
         weight_item = item.weight
-        if(Item::WEIGHT_20FR_MAX.key?(range_length(length_item,container_type)[0]) )
-            if( (weight_item > Item::WEIGHT_20FR_MAX[range_length(length_item,container_type)[1]] ) ||
-                (weight_item < Item::WEIGHT_20FR_MAX[range_length(length_item,container_type)[0]] )
-            )
-                update_result_item_ng(result,index_of_item)
-                update_message_item(result,ContainersHelper::MESSAGE4,index_of_item)
-            end
-        else
-                update_result_item_ng(result,index_of_item)
-                update_message_item(result,ContainersHelper::MESSAGE4,index_of_item)
+        start_range = range_length(length_item,container_type)[0]
+        end_range = range_length(length_item,container_type)[1]
+        if( (weight_item > convert_to_ton(Item::WEIGHT_20FR_MAX[end_range])   )   || 
+            (weight_item < convert_to_ton(Item::WEIGHT_20FR_MAX[start_range]) )
+        )
+            update_result_item_ng(result,index_of_item)
+            update_message_item(result,ContainersHelper::MESSAGE4,index_of_item)
         end
-        puts 'FR20'
     end
 
     def flat_track_check_weight_distribution_FR40(item,container_type,result,index_of_item)
         length_item = item.length
         weight_item = item.weight
-        if(Item::WEIGHT_40FR_MAX.key?(range_length(length_item,container_type)[0]) )
-            if( (item.get_weight() > Item::WEIGHT_40FR_MAX[range_length(length_item,container_type)[1]] ) ||
-                (item.get_weight() < Item::WEIGHT_40FR_MAX[range_length(length_item,container_type)[0]] )
-            )
-                update_result_item_ng(result,index_of_item)
-                update_message_item(result,ContainersHelper::MESSAGE4,index_of_item)
-            end
-        else
-                update_result_item_ng(result,index_of_item)
-                update_message_item(result,ContainersHelper::MESSAGE4,index_of_item)
+        start_range = range_length(length_item,container_type)[0]
+        end_range = range_length(length_item,container_type)[1]
+        if( (weight_item > convert_to_ton(Item::WEIGHT_40FR_MAX[end_range]) ) ||
+            (weight_item < convert_to_ton(Item::WEIGHT_40FR_MAX[start_range]) )
+        )
+            update_result_item_ng(result,index_of_item)
+            update_message_item(result,ContainersHelper::MESSAGE4,index_of_item)
         end
     end    
 
@@ -90,17 +84,18 @@ module ContainersHelper
             update_message_item(result,ContainersHelper::MESSAGE5,index_of_item)
         end
         flat_track_cog_calculation(item,container,result,index_of_item)
+        
     end
 
     def flat_track_cog_calculation(item,container,result,index_of_item)
-        cog_height_type = item.cog_height_type
+        cog_height_type = item.cog_height_type.downcase
         case cog_height_type
         when Item::COG_HEIGHT_TYPE_HALF_OF_CARGO_HEIGHT_OR_LESS
             over_width_check(item,container,result,index_of_item)
         when Item::COG_HEIGHT_TYPE_MANUAL
             over_width_check(item,container,result,index_of_item)
         when Item::COG_HEIGHT_TYPE_TBA
-            update_message_container(result,container,ContainersHelper::MESSAGE10)
+            update_message_container(result,ContainersHelper::MESSAGE10)
             over_width_check(item,container,result,index_of_item)
         end
     end    
@@ -131,53 +126,61 @@ module ContainersHelper
         else
             cog_height_check_1(item,container,result,index_of_item)
         end 
+        
     end
 
     def cog_height_check_2(item,container,result,index_of_item)
         width_item = item.width
         total_height = get_total_height_of_item_in_container()
         cog_value = (total_height/2).to_f
+        
         if(cog_value > width_item * 0.865)
-            result << `#{MESSAGE6}`
+            update_result_item_ng(result,index_of_item)
+            update_message_item(result,ContainersHelper::MESSAGE6,index_of_item)
         end
         update_result_item_ok(result,index_of_item)
-        total_length_check(item,container,result)
+        total_length_check(item,container,result,index_of_item)
     end
     
     def cog_height_check_1(item,container,result,index_of_item)
         width_item = item.width
         total_height = get_total_height_of_item_in_container()
         cog_value = (total_height/2).to_f
+        
         if(cog_value > Item::COG_HEIGHT_FLAT_TRACK)
             update_result_item_ng(result,index_of_item)
             update_message_item(result,ContainersHelper::MESSAGE6,index_of_item)
         end
         update_result_item_ok(result,index_of_item)
-        total_length_check(item,container,result)
+        total_length_check(item,container,result,index_of_item)
     end
 
     def get_total_height_of_item_in_container
         total_height = 0
-        @items = Item.all
         @items.each do |item|
-            if(item.cog_height_type == Item::COG_HEIGHT_TYPE_TBA)
-                height_item = item.height*0.5
-            else 
+            if(item.cog_height_type.downcase == Item::COG_HEIGHT_TYPE_MANUAL)
                 height_item = item.height
+            else
+                height_item = item.height*0.5
+            end
+            if(total_height < height_item)
+                total_height = height_item
             end
         end
         return total_height
     end
 
     def range_length(number,container_type)
-        length = number.to_s.length
-        first_digit = number.to_s[0]
-        start_range = first_digit.to_i * (10**(length.to_i - 1))
         if(container_type == Container::FR20)
-            end_range = start_range + 50
+            divide = (number/50).to_i
+            start_range = 50 * divide
+            end_range = 50 * (divide + 1)
         else
-            end_range = start_range + 100
+            divide = (number/100).to_i
+            start_range = 100 * divide
+            end_range = 100 * (divide + 1)
         end
+        
         return [start_range,end_range]
     end
 
@@ -196,17 +199,20 @@ module ContainersHelper
         cog_height_type = item.cog_height_type.downcase
         case cog_height_type
         when Item::COG_HEIGHT_TYPE_TBA
-            update_message_container(result,container,ContainersHelper::MESSAGE10)
+            update_message_container(result,ContainersHelper::MESSAGE10)
+            
             open_top_cog_value_check(item,container,result,index_of_item)
         when Item::COG_HEIGHT_TYPE_MANUAL
             open_top_cog_value_check(item,container,result,index_of_item)
+            
         when Item::COG_HEIGHT_TYPE_HALF_OF_CARGO_HEIGHT_OR_LESS
             open_top_cog_value_check(item,container,result,index_of_item)
+           
         end
     end
 
     def open_top_cog_value_check(item,container,result,index_of_item)
-        cog_height_type = item.cog_height_type
+        cog_height_type = item.cog_height_type.downcase
         if( (cog_height_type == Item::COG_HEIGHT_TYPE_HALF_OF_CARGO_HEIGHT_OR_LESS) ||
             (cog_height_type == Item::COG_HEIGHT_TYPE_TBA)
         )
@@ -214,6 +220,7 @@ module ContainersHelper
         else
             cog_value = item.height
         end
+        
         if(cog_value > Item::COG_HEIGHT_OPEN_TOP)
             update_result_item_ng(result,index_of_item)
             update_message_item(result, ContainersHelper::MESSAGE6,index_of_item)
@@ -223,8 +230,10 @@ module ContainersHelper
 
     def open_top_weight_distribution_check(item,container,result,index_of_item)
         weight_item = item.weight
-        length_item = item.length
+        length_item = item.length.to_f
+        length_item = convert_to_meter(length_item)
         max_weight_distribution = (weight_item / length_item).to_f
+        
         container_type = container.container_type
         if((container_type == Container::OT20 && max_weight_distribution > Item::OT_WEIGHTDIST_20OT_MAX) || 
             (container_type == Container::OT40 && max_weight_distribution > Item::OT_WEIGHTDIST_40OT_MAX)
@@ -233,28 +242,28 @@ module ContainersHelper
             update_message_item(result,ContainersHelper::MESSAGE7,index_of_item)
         end
         update_result_item_ok(result,index_of_item)
-        total_length_check(item,container,result)
+        total_length_check(item,container,result,index_of_item)
     end
 
-    def total_length_check(item,container,result)
+    def total_length_check(item,container,result,index_of_item)
         total_length = total_length_in_container()
         container_type = container.container_type
         case container_type
         when Container::FR20
             if(total_length > Item::TOTAL_LENGTH_20FR)
-                update_message_container(result,container,ContainersHelper::MESSAGE8)
+                update_message_container(result,ContainersHelper::MESSAGE8)
             end
         when Container::FR40
             if(total_length > Item::TOTAL_LENGTH_40FR)
-                update_message_container(result,container,ContainersHelper::MESSAGE8)
+                update_message_container(result,ContainersHelper::MESSAGE8)
             end
         when Container::OT20
             if(total_length > Item::TOTAL_LENGTH_20OT)
-                update_message_container(result,container,ContainersHelper::MESSAGE8)
+                update_message_container(result,ContainersHelper::MESSAGE8)
             end
         when Container::OT40
             if(total_length > Item::TOTAL_LENGTH_40OT)
-                update_message_container(result,container,ContainersHelper::MESSAGE8)
+                update_message_container(result,ContainersHelper::MESSAGE8)
             end
         end
         total_weight_check(item,container,result)
@@ -266,25 +275,29 @@ module ContainersHelper
         case container_type
         when Container::FR20
             if(total_weight > Item::TOTAL_WEIGHT_20FR)
-                update_message_container(result,container,ContainersHelper::MESSAGE9)
+                update_message_container(result,ContainersHelper::MESSAGE9)
             end
         when Container::FR40
             if(total_weight > Item::TOTAL_WEIGHT_40FR)
-                update_message_container(result,container,ContainersHelper::MESSAGE9)
+                update_message_container(result,ContainersHelper::MESSAGE9)
             end
         when Container::OT20
             if(total_weight > Item::TOTAL_WEIGHT_20OT)
-                update_message_container(result,container,ContainersHelper::MESSAGE9)
+                update_message_container(result,ContainersHelper::MESSAGE9)
             end
         when Container::OT40
             if(total_weight > Item::TOTAL_WEIGHT_40OT)
-                update_message_container(result,container,ContainersHelper::MESSAGE9)
+                update_message_container(result,ContainersHelper::MESSAGE9)
             end
         end
+        update_total_size_container(result)
+        update_total_result_container(result)
+        update_final_conclusion(result)
     end
 
     def total_weight_in_container
         total_weight = 0
+        @items = Item.all
         @items.each do |item|
             weight_item = item.weight
             total_weight = total_weight + weight_item
@@ -294,6 +307,7 @@ module ContainersHelper
 
     def total_length_in_container
         total_length = 0
+        @items = Item.all
         @items.each do |item|
             length_item = item.length
             total_length = total_length + length_item
@@ -303,7 +317,7 @@ module ContainersHelper
 
     def update_message_item(result,message,index_of_item)
         if(result["items"][index_of_item].has_key?("remark"))                   #check if inside of item has key "remark" or not
-            if(result["items"][index_of_item]["remark"].include?(message))             #check if message is existed in remark
+            if(!result["items"][index_of_item]["remark"].include?(message))             #check if message is existed in remark
                 result["items"][index_of_item]["remark"].append(message)
             end
         else
@@ -322,14 +336,14 @@ module ContainersHelper
     end
 
 
-    def update_message_container(result,container,message)
-        update_total_size_container(result,container)
+    def update_message_container(result,message)
+        update_total_size_container(result)
         update_total_result_container(result)
         update_total_remark_container(result,message)
         update_final_conclusion(result)
     end
 
-    def update_total_size_container(result,container)
+    def update_total_size_container(result)
         result['total_length'] = total_length_in_container()
         result['total_weight'] = total_weight_in_container()
     end
@@ -337,21 +351,20 @@ module ContainersHelper
     def update_total_result_container(result)
         result['items'].each do |item|
             if(item['result'] == Item::ITEM_RESULT_NG)
-                result['total_result'] = Item::ITEM_RESULT_NG
+                result['total_result'] = Container::CONTAINER_RESULT_NG
                 break
             end
-            result['total_result'] = Item::ITEM_RESULT_OK 
+            result['total_result'] = Container::CONTAINER_RESULT_OK 
         end
     end
 
     def update_total_remark_container(result,message)
         if(result.has_key?('total_remark'))                     #check if inside of container has key "total_remark" or not
             if(!result['total_remark'].include?(message))         #check if message is existed in key "total_remark"
-                tmp_message = result['total_remark']
-                result['total_remark'] = "#{tmp_message} \n#{message}"
+                result['total_remark'].append(message)
             end
         else
-            result['total_remark'] = message
+            result['total_remark'] = [message]
         end
     end
 
@@ -363,5 +376,11 @@ module ContainersHelper
         end 
     end
 
+    def convert_to_ton(weight)
+        weight = (weight/1000).to_f
+    end
 
+    def convert_to_meter(length)
+        length = (length/100).to_f
+    end
 end

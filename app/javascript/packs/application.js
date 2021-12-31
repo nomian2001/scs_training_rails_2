@@ -9,6 +9,24 @@ import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 import 'bootstrap'
 import '../stylesheets/application'
+import "@fortawesome/fontawesome-free/css/all"
+
+
+window.onload = function(){
+    var accept_item = $('#acceptance_item').html()
+    if(accept_item == 'ng')
+        $('#acceptance_item').css('background-color','#FF5C67')
+    else
+        $('#acceptance_item').css('background-color','#4CB5AE')
+
+    var check_exist_item_in_container = document.querySelector('.item_result')
+    var button_submit_container = document.querySelector('.item_submit')
+    if(check_exist_item_in_container )
+        button_submit_container.disabled = false;
+    else
+        button_submit_container.disabled = true;
+    
+}
 
 
 Rails.start()

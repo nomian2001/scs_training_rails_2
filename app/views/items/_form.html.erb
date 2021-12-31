@@ -18,13 +18,13 @@
 
     <fieldset>
       <legend><%= form.label :width %></legend>
-      <%= form.number_field :width, in: 0..300, step: 1 %>
+      <%= form.number_field :width, in: 0..600, step: 1 %>
       
     </fieldset>
 
     <fieldset>
       <legend><%= form.label :height %> </legend>
-      <%= form.number_field :height, in: 0..400, step: 1 %>
+      <%= form.number_field :height, in: 0..1200, step: 1 %>
     </fieldset>
 
     <fieldset>
@@ -37,7 +37,7 @@
   <div class="size_group d-flex">
     <fieldset>
       <legend><%= form.label :weight %> </legend>
-      <%= form.number_field :weight, in: 0.0..5.0, step: 0.1 %>
+      <%= form.number_field :weight, in: 0.0..35.0, step: 0.1 %>
     </fieldset>
     
     <fieldset>
@@ -55,13 +55,13 @@
       
     </fieldset>
     
-    <fieldset>
+    <fieldset class="cog_height">
       <legend><%= form.label :cog_height %></legend>
-        <%= form.number_field :cog_height, in: 0..400, step: 1 %>
+        <%= form.number_field :cog_height, in: 0..1200, step: 1 %>
       
     </fieldset>
 
-    <fieldset>
+    <fieldset class="cog_height_unit">
       <legend><%= form.label "Unit"%></legend>
       <%= form.text_field :cog_height_unit, value: 'cm', readonly: true%>
       
