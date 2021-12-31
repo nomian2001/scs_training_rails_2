@@ -23,6 +23,7 @@ class ContainersController < ApplicationController
 
   # GET /containers/1/edit
   def edit
+    @items = Item.all
   end
 
   # POST /containers or /containers.json
