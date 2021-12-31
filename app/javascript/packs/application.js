@@ -26,6 +26,8 @@ window.onload = function(){
     else
         button_submit_container.disabled = true;
     
+    var select_value = $('#item_cog_height_type').html()
+    alert(select_value)
 }
 
 
